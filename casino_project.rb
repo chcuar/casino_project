@@ -18,6 +18,7 @@ def lucky
     puts "Spinning..."
     @account_balance = rand(1..1000).to_f
     puts "Congrats! $#{@account_balance} has been added to your account!"
+    separator
     menu
   elsif 
     menu
@@ -255,6 +256,56 @@ end
 def slots
  separator
  puts "-- Welcome to Slots --"
+ separator
+ puts "How much would you like to play with?"
+ puts "Your balance is currently: #{@account_balance}"
+ @slot_bet = gets.strip.to_f
+ puts "Go ahead and press 'p' to pull the lever"
+ @pull_lever = gets.strip
+separator
+if @pull_lever == "p"
+ @myArray = ["stuff", "widget", "ruby", "goodies", "java" ]
+ @item1 = @myArray.sample
+ @item2 = @myArray.sample
+ @item3 = @myArray.sample
+puts "Spinning..."
+separator
+  puts "[ #{@item1} ] [ #{@item2} ]  [ #{@item3} ]" 
+separator
+  if @item1 == @item2 && @item1 == @item3 && @item2 == @item3
+    puts "Hey you won!"
+    @account_balance += @slot_bet
+    puts "Your account balance is now $#{@account_balance}"
+    play_again
+  elsif @item1 == @item2 || @item1 == @item3 || @item2 == @item3
+    puts "Hey you...kinda won!"
+    @slot_bet = @slot_bet / 2
+    @account_balance += @slot_bet
+    puts "Your account balance is now $#{@account_balance}"
+    play_again
+  else
+    puts "Sorry didn't win.."
+    @account_balance -= @slot_bet
+    puts "Your account balance is now $#{@account_balance}"
+    play_again
+  end
+else
+  puts "Press 'p' when you are ready to play"
+end
+end
+
+def play_again
+  separator
+  puts "Would you like to play again? (y/n)"
+  @play_again = gets.strip
+  if @play_again == "y"
+    slots
+  elsif @play_again == "n"
+    menu
+  else
+    "Sorry that wasn't an option.."
+    play_again
+  end
 end
 
 def exit_casino
