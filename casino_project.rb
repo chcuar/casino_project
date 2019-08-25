@@ -1,13 +1,15 @@
 require 'colorize'
+require 'artii'
 
 @user_name
 @cchoice
-@account_balance = 0
-@n1 = rand(1...100)
-@n2 = rand(1...100)
+@account_balance = 0.00
+n1 = rand(1...100)
+n2 = rand(1...100)
+@a = Artii::Base.new :font => 'slant'
 
 def welcome
-  puts "Welcome to DPL Casino"
+  puts @a.asciify('DPL Casino!')
   separator
   puts "Please enter your name"
   @user_name = gets.strip
@@ -23,7 +25,7 @@ puts "Are you feeling lucky? y/n"
     puts "...Spinning..."
     separator
     @account_balance = rand(1...1000).to_f
-    puts "Congrats! #{@account_balance} has been added to your account!".colorize(:green)
+    puts "Congrats! $#{(@account_balance).round(2)} has been added to your account!".colorize(:green)
     menu
   elsif @lucky == "n"
     menu
@@ -56,7 +58,7 @@ def menu
       else
         puts "You must deposit funds in your account before playing".colorize(:red)
         separator
-        menu
+        deposit
       end
     when 3
       exit_casino
@@ -69,7 +71,7 @@ def menu
   end
 
   def casino_account
-    puts "Casino Account"
+    puts @a.asciify('Casino Account!')
     separator
     puts "Please select from the choices below"
     puts "1) View Account Balance"
@@ -100,7 +102,7 @@ def menu
   end
 
   def view_games
-    puts "Casino Games"
+    puts @a.asciify('Casino Games!')
     separator
     puts "Please choose a game below:"
     puts "1) Slots"
@@ -130,7 +132,7 @@ def menu
   end
 
   def deposit
-    puts "Deposit Center"
+    puts 'Deposit Center'
     separator
     puts "How much would you like to deposit?"
     @deposit = gets.to_f
@@ -147,7 +149,7 @@ def menu
     puts "How much would you like to withdraw?"
     @withdraw = gets.chomp.to_f
       if @withdraw > @account_balance
-        puts "Sorry, not enough funds"
+        puts "Sorry, not enough funds".colorize(:red)
         separator
         withdraw
       elsif @withdraw <= @account_balance
@@ -162,11 +164,16 @@ def menu
   end
 
   def high_low
-    puts "Welcome to Hi/Lo"
+    n1 = rand(1...100)
+    n2 = rand(1...100)
+    puts @a.asciify('High / Low')
     separator
-    puts "Your first number is #{@n1}"
+    puts "In this game you will get an initial number and then predict whether 
+    the next number will be lower or higher than the first"
+    puts "Your first number is #{n1}"
     separator
     puts "Please enter your bet amount:"
+    puts "Your balance is currently: #{@account_balance}"
     @bet1 = gets.chomp.to_f
     separator
       while @bet1 > @account_balance do
@@ -178,12 +185,13 @@ def menu
     puts "Will the next number be higher or lower? (h/l)"
     @hl1 = gets.chomp
     separator
-    puts "The next number is #{@n2}"
+    puts "The next number is #{n2}"
     case @hl1
     when "h"
-      if @n2 > @n1
+      if n2 > n1
         @bet1 *= 0.5
         @account_balance += @bet1
+        separator
           puts "Congratulations, you've won!".colorize(:green)
           puts "Your new balance is $#{@account_balance}".colorize(:green)
           separator
@@ -198,7 +206,7 @@ def menu
                 puts "Please enter y or n"
             end
     
-      elsif @n2 < @n1
+      elsif n2 < n1
         @account_balance -= @bet1
         puts "Sorry, you've lost".colorize(:red)
         puts "Your remaining balance is $#{@account_balance}"
@@ -228,7 +236,7 @@ def menu
       end
 
     when "l"
-      if @n2 > @n1
+      if n2 > n1
         @account_balance -= @bet1
         puts "Sorry, you've lost".colorize(:red)
         puts "Your remaining balance is $#{@account_balance}"
@@ -244,7 +252,7 @@ def menu
             puts "Please enter y or n".colorize(:red)
           end
     
-      elsif @n2 < @n1
+      elsif n2 < n1
         @bet1 *= 0.5
         @account_balance += @bet1
           puts "Congratulations, you've won!".colorize(:green)
@@ -281,6 +289,70 @@ def menu
     end
 
   end
+
+  def slots
+    separator
+    puts @a.asciify('SLOTS')
+    separator
+    puts "In this game you will pull a lever and three random words will generate."
+    puts "If all three match, you win! If 2 of the three match, you get a partial win!"
+    separator
+    puts "Your balance is currently: #{@account_balance}".colorize(:green)
+    puts "How much would you like to bet?"
+    @slot_bet = gets.strip.to_f
+    separator
+    while @slot_bet > @account_balance do
+      puts "Sorry, you cannot bet more than your balance".colorize(:red)
+      puts "Please try another bet"
+      @slot_bet = gets.chomp.to_f
+    end
+    separator
+    puts "Go ahead and press 'p' to pull the lever"
+    @pull_lever = gets.strip
+   separator
+   if @pull_lever == "p"
+    @myArray = ["stuff", "widget", "ruby", "goodies", "java" ]
+    @item1 = @myArray.sample
+    @item2 = @myArray.sample
+    @item3 = @myArray.sample
+   puts "Spinning..."
+   separator
+     puts "[ #{@item1} ] [ #{@item2} ]  [ #{@item3} ]" 
+   separator
+     if @item1 == @item2 && @item1 == @item3 && @item2 == @item3
+       puts "3x Match! You Won".colorize(:green)
+       @account_balance += @slot_bet
+       puts "Your account balance is now $#{@account_balance}".colorize(:green)
+       play_again
+     elsif @item1 == @item2 || @item1 == @item3 || @item2 == @item3
+       puts "2x Match! You Won!".colorize(:green)
+       @slot_bet = @slot_bet / 2
+       @account_balance += @slot_bet
+       puts "Your account balance is now $#{@account_balance}".colorize(:green)
+       play_again
+     else
+       puts "0 Matches".colorize(:red)
+       @account_balance -= @slot_bet
+       puts "Your account balance is now $#{@account_balance}".colorize(:red)
+       play_again
+     end
+   else
+     puts "Press 'p' when you are ready to play"
+   end
+   end
+   
+   def play_again
+     puts "Would you like to play again? (y/n)"
+     @play_again = gets.strip
+     if @play_again == "y"
+       slots
+     elsif @play_again == "n"
+       menu
+     else
+       "Sorry that wasn't an option..".colorize(:red)
+       play_again
+     end
+   end
 
   # class Card
   #   # Getter and Setter methods for rank, suit and color
