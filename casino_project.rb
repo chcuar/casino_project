@@ -8,8 +8,23 @@ n1 = rand(1...100)
 n2 = rand(1...100)
 @a = Artii::Base.new :font => 'slant'
 
+@user_account = [
+  {
+    id: 1,
+    name: "Christian Cuartas",
+    pass: '123456',
+    account_balance: 500.00
+},
+{
+  id: 2,
+  name: "Candice Cuartas",
+  pass: 'abcdef',
+  account_balance: 1500.00
+}
+]
+
 def welcome
-  puts @a.asciify('DPL Casino!')
+  puts @a.asciify('DPL Casino!').colorize(:yellow)
   separator
   puts "Please enter your name"
   @user_name = gets.strip
@@ -17,6 +32,16 @@ def welcome
   puts "Hello #{(@user_name).capitalize}, thank you for choosing DPL Casino!"
   lucky
 end
+
+def new_user
+  
+
+end
+
+def returning_user
+
+end
+
 
 def lucky
 puts "Are you feeling lucky? y/n"
@@ -317,7 +342,7 @@ def menu
     @item3 = @myArray.sample
    puts "Spinning..."
    separator
-     puts "[ #{@item1} ] [ #{@item2} ]  [ #{@item3} ]" 
+     puts "[ #{@item1} ] [ #{@item2} ]  [ #{@item3} ]".colorize(:cyan)
    separator
      if @item1 == @item2 && @item1 == @item3 && @item2 == @item3
        puts "3x Match! You Won".colorize(:green)
@@ -353,57 +378,5 @@ def menu
        play_again
      end
    end
-
-  # class Card
-  #   # Getter and Setter methods for rank, suit and color
-  #   attr_accessor :rank, :suit, :color
-  #   # Gets called when you call the new method to create an instance
-  #   # card = Card.new('10', 'Spades', 'Black')
-  #   def initialize(rank, suit, color)
-  #     @rank = rank
-  #     @suit = suit
-  #     @color = color
-  #   end
-  #  end
-
-  #  class Deck
-  #   # Getter and Setter methods for rank, suit and color
-  #   attr_accessor :cards
-   
-  #   # Gets called when you call the new method to create an instance
-  #   # deck = Deck.new
-  #   def initialize
-  #     @ranks = %w(A 2 3 4 5 6 7 8 9 10 J Q K)
-  #     @suits = %w(Spades Diamonds Clubs Hearts)
-  #     @cards = []
-  #     generate_deck
-  #   end
-   
-  #   def shuffle_cards
-  #    @cards.shuffle
-  #   end
-    
-  #   def generate_deck
-  #     @suits.each do |suit|
-  #       @ranks.size.times do |i|
-  #         # Ternary Operator
-  #         color = (suit == 'Spades' || suit == 'Clubs') ? 'Black' : 'Red' 
-  #         @cards << Card.new(@ranks[i], suit, color)
-  #       end
-  #     end
-  #     random_card
-  #   end
-
-  #   def random_card
-  #     rand_card = @cards.sample
-  #     puts "Here is your card: #{rand_card.rank} #{rand_card.suit} (#{rand_card.color})"
-  #   end
-   
-  #    def display_cards
-  #      @cards.shuffle.each do |card|
-  #        puts "#{card.rank} #{card.suit} (#{card.color})"
-  #      end
-  #    end
-  #  end
 
   welcome
