@@ -1,10 +1,16 @@
 # casino account √
 
+# TODO Random events occur when changing games that can increase or decrease player's bankroll
+# TODO Find a gem that allows you to play sound and find casino sounds that will play on each game change/events
+
+require 'colorize'
+
 @account_balance = 0
 
 
 def welcome
   puts "Welcome to the DPL Casino!"
+  
   puts "What is your name?"
   @user_name = gets.strip
   puts "Hey #{@user_name.capitalize}, thanks for coming to the DPL Casino."
