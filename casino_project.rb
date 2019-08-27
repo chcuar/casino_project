@@ -1,3 +1,4 @@
+
 require 'colorize'
 require 'artii'
 
@@ -239,6 +240,7 @@ def menu
         puts "Would you like to play again? y/n"
         @choice3 = gets.chomp
           case @choice3
+
             when "y"
               high_low
             when "n"
@@ -303,6 +305,7 @@ def menu
             when "n"
               menu
             else
+
             puts "Please enter y or n".colorize(:red)
           end
       end
@@ -380,3 +383,4 @@ def menu
    end
 
   welcome
+

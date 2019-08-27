@@ -1,14 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+
+
     artii (2.1.2)
+
     colorize (0.8.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+
   artii
+
   colorize
 
 BUNDLED WITH
