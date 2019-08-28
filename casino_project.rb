@@ -23,6 +23,8 @@ n2 = rand(1...100)
 }
 ]
 
+@win_loss_amount = 0
+
 def welcome
   puts @a.asciify('DPL Casino!').colorize(:yellow)
   separator
@@ -50,7 +52,9 @@ puts "Are you feeling lucky? y/n"
     puts "...Spinning..."
     separator
     @account_balance = rand(1...1000).to_f
+    @win_loss_amount = @account_balance
     puts "Congrats! $#{(@account_balance).round(2)} has been added to your account!".colorize(:green)
+    separator
     menu
   elsif @lucky == "n"
     menu
@@ -132,7 +136,8 @@ def menu
     puts "Please choose a game below:"
     puts "1) Slots"
     puts "2) High/Low"
-    puts "3) Main Menu"
+    puts "3) Craps"
+    puts "4) Main Menu"
     @game_choice = gets.chomp.to_i
 
     if @game_choice == 1
@@ -140,6 +145,8 @@ def menu
     elsif @game_choice == 2
       high_low
     elsif @game_choice == 3
+      craps
+    elsif @game_choice == 4
       menu
     else
       separator
@@ -216,8 +223,10 @@ def menu
       if n2 > n1
         @bet1 *= 0.5
         @account_balance += @bet1
+        @win_loss_amount += @bet1
         separator
           puts "Congratulations, you've won!".colorize(:green)
+          
           puts "Your new balance is $#{@account_balance}".colorize(:green)
           separator
           puts "Would you like to play again? y/n"
@@ -378,5 +387,73 @@ def menu
        play_again
      end
    end
+   def play_again_craps
+     puts "Would you like to play again? (y/n)"
+     @play_again = gets.strip
+     if @play_again == "y"
+       craps
+     elsif @play_again == "n"
+       menu
+     else
+       "Sorry that wasn't an option..".colorize(:red)
+       play_again_craps
+     end
+   end
+
+def craps
+  @a.asciify('Craps')   
+   puts "Welcome to the game of Craps!"
+   srand Time.now.tv_sec
+
+   puts "Total cash: $#{@account_balance}"
+   puts "How much would you like to bet?"
+   @bet = gets.chomp.to_i
+   @account_balance -= @bet
+   
+ def getroll
+   2 + rand(6) + rand(6)
+ end
+
+#  init
+ roll1 = getroll
+ puts "Your roll was " + roll1.to_s
+   case roll1
+   when "7", "11", "12"
+     puts "You win!"
+       exit
+   when "2", "3"
+     puts "Sorry, better luck next time!"
+       exit
+   else
+     puts "Roll again!"
+   end
+ 
+   point = getroll
+   puts "Point is " + point.to_s
+   case point
+     when "7"
+       puts "Sorry, better luck next time!"
+     exit
+     when roll1
+       puts "You win!"
+     exit
+   end
+    roll2 = "0"
+     while point != roll2
+     roll2 = getroll
+     puts "Your roll is " + roll2.to_s
+     case roll2
+       when "7"
+       puts "Sorry, better luck next time!"
+     exit
+       when point
+       puts "You win!"
+     exit
+     else
+       puts "Roll again"
+     end
+    end
+    play_again_craps
+  end
 
   welcome
