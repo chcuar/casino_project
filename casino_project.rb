@@ -106,7 +106,8 @@ def menu
     puts "1) View Account Balance"
     puts "2) Deposit Funds"
     puts "3) Withdraw Funds"
-    puts "4) Return to Main Menu"
+    puts "4) View Win/Loss Amount"
+    puts "5) Return to Main Menu"
     @user_choice = gets.chomp.to_i
     case @user_choice
       when 1
@@ -120,6 +121,10 @@ def menu
         withdraw
         separator
       when 4
+        "Your win/loss amount so far is #{@win_loss_amount}"
+        separator
+        casino_account
+      when 5
         menu
       else
         separator
@@ -159,8 +164,18 @@ def menu
     puts "Exiting"
     separator
     puts "Your Account Balance is #{@account_balance}".colorize(:green)
+    separator
+    if @win_loss_amount > 0
+      puts "You won #{@win_loss_amount}".colorize(:green)
+    elsif @win_loss_amount < 0
+      puts "Darn, looks like you lost #{@win_loss_amount}".colorize(:red)  
+    else
+      puts "Looks like you broke even."
+    end
+    separator
+    puts "Thank you for visiting the DPL Casino!"
     puts "See You Soon!"
-    Exit
+    exit
   end
 
   def deposit
@@ -242,6 +257,7 @@ def menu
     
       elsif n2 < n1
         @account_balance -= @bet1
+        @win_loss_amount -= @bet1
         puts "Sorry, you've lost".colorize(:red)
         puts "Your remaining balance is $#{@account_balance}"
         separator
@@ -289,6 +305,7 @@ def menu
       elsif n2 < n1
         @bet1 *= 0.5
         @account_balance += @bet1
+        @win_loss_amount += @bet1
           puts "Congratulations, you've won!".colorize(:green)
           puts "Your new balance is $#{@account_balance}".colorize(:green)
           separator
@@ -345,7 +362,7 @@ def menu
     @pull_lever = gets.strip
    separator
    if @pull_lever == "p"
-    @myArray = ["stuff", "widget", "ruby", "goodies", "java" ]
+    @myArray = ["rails", "class", "ruby", "goodies", "arrays" ]
     @item1 = @myArray.sample
     @item2 = @myArray.sample
     @item3 = @myArray.sample
@@ -356,17 +373,20 @@ def menu
      if @item1 == @item2 && @item1 == @item3 && @item2 == @item3
        puts "3x Match! You Won".colorize(:green)
        @account_balance += @slot_bet
+       @win_loss_amount += @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:green)
        play_again
      elsif @item1 == @item2 || @item1 == @item3 || @item2 == @item3
        puts "2x Match! You Won!".colorize(:green)
        @slot_bet = @slot_bet / 2
        @account_balance += @slot_bet
+       @win_loss_amount += @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:green)
        play_again
      else
        puts "0 Matches".colorize(:red)
        @account_balance -= @slot_bet
+       @win_loss_amount -= @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:red)
        play_again
      end
