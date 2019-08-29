@@ -1,10 +1,11 @@
-
+require 'pry'
 require 'colorize'
 require 'artii'
 
-@user_name
+@user_name = ''
+@password = ''
 @cchoice
-@account_balance = 0.00
+# @account_balance = 0.00
 n1 = rand(1...100)
 n2 = rand(1...100)
 @a = Artii::Base.new :font => 'slant'
@@ -12,14 +13,14 @@ n2 = rand(1...100)
 @user_account = [
   {
     id: 1,
-    name: "Christian Cuartas",
-    pass: '123456',
+    name: "Christian",
+    pass: '12',
     account_balance: 500.00
 },
 {
   id: 2,
-  name: "Candice Cuartas",
-  pass: 'abcdef',
+  name: "Candice",
+  pass: 'ab',
   account_balance: 1500.00
 }
 ]
@@ -29,21 +30,67 @@ n2 = rand(1...100)
 def welcome
   puts @a.asciify('DPL Casino!').colorize(:yellow)
   separator
-  puts "Please enter your name"
-  @user_name = gets.strip
+
+  puts "Are you a returning user? (y/n)"
   separator
-  puts "Hello #{(@user_name).capitalize}, thank you for choosing DPL Casino!"
-  lucky
+  @returning = gets.chomp
+  case @returning
+  when "y"
+    returning_user
+  when "n"
+    new_user
+  else
+    puts "Please enter y or n"
+  end
+  
 end
 
 def new_user
-  
-
+  separator
+  puts "Please enter your name"
+  @user_name = gets.strip
+  separator
+  puts "Please enter your password"
+  @password = gets.strip
+  separator
+  puts "Hello #{(@user_name).capitalize}, thank you for choosing DPL Casino!"
+  separator
+  lucky
 end
 
 def returning_user
-
+  puts "Please enter your name:"
+  get_username = gets.chomp
+    @user_account.each do |user|
+      if get_username == user[:name]
+        puts "Please enter your password"
+        get_pass = gets. chomp
+        @user_account.each do |user|
+          if get_pass == user[:pass]
+            @user_name = get_username
+            @password = get_pass
+            @id = user[:id]
+            @account_balance = user[:account_balance]
+            puts "Welcome Back #{(@user_name).capitalize}"
+            menu
+          else
+            next
+          end
+        end
+        if @password == ''
+          puts "Please enter a valid password".colorize(:red)
+          returning_user
+        end
+      else
+        next
+      end
+    end
+    if @user_name == ''
+      puts "Please enter a valid username".colorize(:red)
+      returning_user
+    end
 end
+    
 
 
 def lucky
@@ -166,6 +213,27 @@ def menu
     puts "Exiting"
     separator
     puts "Your Account Balance is #{@account_balance}".colorize(:green)
+
+    new_id = @user_account.count + 1
+
+    new_name = @user_name
+    new_pass = @password
+    new_account_balance = @account_balance
+
+    if @returning == 'y'
+      @user_account[@id - 1][:account_balance] = @account_balance
+      # @user_account << update_hash
+    elsif @returning == 'n'
+
+        new_hash = {
+          id: new_id,
+          name: new_name,
+          pass: new_pass,
+          account_balance: new_account_balance
+          }
+        
+          @user_account << new_hash
+     end
     separator
     if @win_loss_amount > 0
       puts "You won #{@win_loss_amount}".colorize(:green)
@@ -178,6 +246,7 @@ def menu
     puts "Thank you for visiting the DPL Casino!"
     puts "See You Soon!"
     exit
+    
   end
 
   def deposit
@@ -454,32 +523,7 @@ def craps
       play_again_craps 
    end
  
-  #  point = getroll
-  #  puts "Point is " + point.to_s
-  #  case point
-  #    when "7"
-  #      puts "Sorry, better luck next time!"
-  #    exit
-  #    when roll1
-  #      puts "You win!"
-  #    exit
-  #  end
-  #   roll2 = "0"
-  #    while point != roll2
-  #    roll2 = getroll
-  #    puts "Your roll is " + roll2.to_s
-  #    case roll2
-  #      when "7"
-  #      puts "Sorry, better luck next time!"
-  #    exit
-  #      when point
-  #      puts "You win!"
-  #    exit
-  #    else
-  #      puts "Roll again"
-  #    end
-  #   end
-  #   play_again_craps
+
   end
 
   welcome
