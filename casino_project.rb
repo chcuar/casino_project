@@ -50,6 +50,7 @@ puts "Are you feeling lucky? y/n"
 @lucky = gets.chomp
   if @lucky == "y"
     puts "...Spinning..."
+    sleep(1)
     separator
     @account_balance = rand(1...1000).to_f
     @win_loss_amount = @account_balance
@@ -428,52 +429,54 @@ def craps
    puts "Total cash: $#{@account_balance}"
    puts "How much would you like to bet?"
    @bet = gets.chomp.to_i
-   @account_balance -= @bet
+  #  @account_balance -= @bet
    
  def getroll
-   2 + rand(6) + rand(6)
+   2 + rand(1..6) + rand(1..6)
  end
 
 #  init
- roll1 = getroll
- puts "Your roll was " + roll1.to_s
-   case roll1
-   when "7", "11", "12"
+ @roll1 = getroll
+ puts "Your roll was " + @roll1.to_s
+   if @roll1 == 7 || @roll1 == 11 || @roll1 == 12
      puts "You win!"
-       exit
-   when "2", "3"
-     puts "Sorry, better luck next time!"
-       exit
-   else
-     puts "Roll again!"
+     @account_balance += @bet
+     play_again_craps 
+   elsif @roll1 == 2 || @roll1 == 3
+      puts "Sorry, better luck next time!"
+      @account_balance -= @bet
+      play_again_craps 
+    else
+      puts "Try again"
+      play_again_craps 
    end
  
-   point = getroll
-   puts "Point is " + point.to_s
-   case point
-     when "7"
-       puts "Sorry, better luck next time!"
-     exit
-     when roll1
-       puts "You win!"
-     exit
-   end
-    roll2 = "0"
-     while point != roll2
-     roll2 = getroll
-     puts "Your roll is " + roll2.to_s
-     case roll2
-       when "7"
-       puts "Sorry, better luck next time!"
-     exit
-       when point
-       puts "You win!"
-     exit
-     else
-       puts "Roll again"
-     end
-    end
-    play_again_craps
+  #  point = getroll
+  #  puts "Point is " + point.to_s
+  #  case point
+  #    when "7"
+  #      puts "Sorry, better luck next time!"
+  #    exit
+  #    when roll1
+  #      puts "You win!"
+  #    exit
+  #  end
+  #   roll2 = "0"
+  #    while point != roll2
+  #    roll2 = getroll
+  #    puts "Your roll is " + roll2.to_s
+  #    case roll2
+  #      when "7"
+  #      puts "Sorry, better luck next time!"
+  #    exit
+  #      when point
+  #      puts "You win!"
+  #    exit
+  #    else
+  #      puts "Roll again"
+  #    end
+  #   end
+  #   play_again_craps
   end
 
   welcome
