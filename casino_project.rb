@@ -245,7 +245,7 @@ def menu
     separator
     puts "Thank you for visiting the DPL Casino!"
     puts "See You Soon!"
-    exit
+    welcome
     
   end
 
