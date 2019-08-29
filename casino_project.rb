@@ -25,6 +25,8 @@ n2 = rand(1...100)
 }
 ]
 
+@win_loss_amount = 0
+
 def welcome
   puts @a.asciify('DPL Casino!').colorize(:yellow)
   separator
@@ -96,9 +98,12 @@ puts "Are you feeling lucky? y/n"
 @lucky = gets.chomp
   if @lucky == "y"
     puts "...Spinning..."
+    sleep(1)
     separator
     @account_balance = rand(1...1000).to_f
+    @win_loss_amount = @account_balance
     puts "Congrats! $#{(@account_balance).round(2)} has been added to your account!".colorize(:green)
+    separator
     menu
   elsif @lucky == "n"
     menu
@@ -150,7 +155,8 @@ def menu
     puts "1) View Account Balance"
     puts "2) Deposit Funds"
     puts "3) Withdraw Funds"
-    puts "4) Return to Main Menu"
+    puts "4) View Win/Loss Amount"
+    puts "5) Return to Main Menu"
     @user_choice = gets.chomp.to_i
     case @user_choice
       when 1
@@ -164,6 +170,10 @@ def menu
         withdraw
         separator
       when 4
+        "Your win/loss amount so far is #{@win_loss_amount}"
+        separator
+        casino_account
+      when 5
         menu
       else
         separator
@@ -180,7 +190,8 @@ def menu
     puts "Please choose a game below:"
     puts "1) Slots"
     puts "2) High/Low"
-    puts "3) Main Menu"
+    puts "3) Craps"
+    puts "4) Main Menu"
     @game_choice = gets.chomp.to_i
 
     if @game_choice == 1
@@ -188,6 +199,8 @@ def menu
     elsif @game_choice == 2
       high_low
     elsif @game_choice == 3
+      craps
+    elsif @game_choice == 4
       menu
     else
       separator
@@ -221,12 +234,19 @@ def menu
         
           @user_account << new_hash
      end
-
-    @user_account.each do |account|
-      puts "#{account[:id]}, #{account[:name]}, #{account[:pass]}, #{account[:account_balance]}"
+    separator
+    if @win_loss_amount > 0
+      puts "You won #{@win_loss_amount}".colorize(:green)
+    elsif @win_loss_amount < 0
+      puts "Darn, looks like you lost #{@win_loss_amount}".colorize(:red)  
+    else
+      puts "Looks like you broke even."
     end
+    separator
+    puts "Thank you for visiting the DPL Casino!"
     puts "See You Soon!"
-    welcome
+    exit
+    
   end
 
   def deposit
@@ -289,8 +309,10 @@ def menu
       if n2 > n1
         @bet1 *= 0.5
         @account_balance += @bet1
+        @win_loss_amount += @bet1
         separator
           puts "Congratulations, you've won!".colorize(:green)
+          
           puts "Your new balance is $#{@account_balance}".colorize(:green)
           separator
           puts "Would you like to play again? y/n"
@@ -306,6 +328,7 @@ def menu
     
       elsif n2 < n1
         @account_balance -= @bet1
+        @win_loss_amount -= @bet1
         puts "Sorry, you've lost".colorize(:red)
         puts "Your remaining balance is $#{@account_balance}"
         separator
@@ -354,6 +377,7 @@ def menu
       elsif n2 < n1
         @bet1 *= 0.5
         @account_balance += @bet1
+        @win_loss_amount += @bet1
           puts "Congratulations, you've won!".colorize(:green)
           puts "Your new balance is $#{@account_balance}".colorize(:green)
           separator
@@ -411,7 +435,7 @@ def menu
     @pull_lever = gets.strip
    separator
    if @pull_lever == "p"
-    @myArray = ["stuff", "widget", "ruby", "goodies", "java" ]
+    @myArray = ["rails", "class", "ruby", "goodies", "arrays" ]
     @item1 = @myArray.sample
     @item2 = @myArray.sample
     @item3 = @myArray.sample
@@ -422,17 +446,20 @@ def menu
      if @item1 == @item2 && @item1 == @item3 && @item2 == @item3
        puts "3x Match! You Won".colorize(:green)
        @account_balance += @slot_bet
+       @win_loss_amount += @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:green)
        play_again
      elsif @item1 == @item2 || @item1 == @item3 || @item2 == @item3
        puts "2x Match! You Won!".colorize(:green)
        @slot_bet = @slot_bet / 2
        @account_balance += @slot_bet
+       @win_loss_amount += @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:green)
        play_again
      else
        puts "0 Matches".colorize(:red)
        @account_balance -= @slot_bet
+       @win_loss_amount -= @slot_bet
        puts "Your account balance is now $#{@account_balance}".colorize(:red)
        play_again
      end
@@ -453,6 +480,51 @@ def menu
        play_again
      end
    end
+   def play_again_craps
+     puts "Would you like to play again? (y/n)"
+     @play_again = gets.strip
+     if @play_again == "y"
+       craps
+     elsif @play_again == "n"
+       menu
+     else
+       "Sorry that wasn't an option..".colorize(:red)
+       play_again_craps
+     end
+   end
+
+def craps
+  @a.asciify('Craps')   
+   puts "Welcome to the game of Craps!"
+   srand Time.now.tv_sec
+
+   puts "Total cash: $#{@account_balance}"
+   puts "How much would you like to bet?"
+   @bet = gets.chomp.to_i
+  #  @account_balance -= @bet
+   
+ def getroll
+   2 + rand(1..6) + rand(1..6)
+ end
+
+#  init
+ @roll1 = getroll
+ puts "Your roll was " + @roll1.to_s
+   if @roll1 == 7 || @roll1 == 11 || @roll1 == 12
+     puts "You win!"
+     @account_balance += @bet
+     play_again_craps 
+   elsif @roll1 == 2 || @roll1 == 3
+      puts "Sorry, better luck next time!"
+      @account_balance -= @bet
+      play_again_craps 
+    else
+      puts "Try again"
+      play_again_craps 
+   end
+ 
+
+  end
 
   welcome
 
