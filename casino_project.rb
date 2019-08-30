@@ -41,6 +41,7 @@ def welcome
     new_user
   else
     puts "Please enter y or n"
+    welcome
   end
   
 end
@@ -63,11 +64,12 @@ def returning_user
   get_username = gets.chomp
     @user_account.each do |user|
       if get_username == user[:name]
+        @user_name = get_username
         puts "Please enter your password"
         get_pass = gets. chomp
         @user_account.each do |user|
           if get_pass == user[:pass]
-            @user_name = get_username
+            
             @password = get_pass
             @id = user[:id]
             @account_balance = user[:account_balance]
@@ -77,16 +79,15 @@ def returning_user
             next
           end
         end
-        if @password == ''
-          puts "Please enter a valid password".colorize(:red)
-          returning_user
-        end
       else
         next
       end
     end
     if @user_name == ''
       puts "Please enter a valid username".colorize(:red)
+      returning_user
+    elsif @password == ''
+      puts "Please enter a valid password".colorize(:red)
       returning_user
     end
 end
