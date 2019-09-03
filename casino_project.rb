@@ -107,6 +107,7 @@ puts "Are you feeling lucky? y/n"
     separator
     menu
   elsif @lucky == "n"
+    @account_balance = 0
     menu
   else
     puts "Please enter y or n"
@@ -150,7 +151,7 @@ def menu
   end
 
   def casino_account
-    puts @a.asciify('Casino Account!')
+    puts @a.asciify('Casino Account!').colorize(:yellow)
     separator
     puts "Please select from the choices below"
     puts "1) View Account Balance"
@@ -186,7 +187,7 @@ def menu
   end
 
   def view_games
-    puts @a.asciify('Casino Games!')
+    puts @a.asciify('Casino Games!').colorize(:yellow)
     separator
     puts "Please choose a game below:"
     puts "1) Slots"
@@ -251,7 +252,7 @@ def menu
   end
 
   def deposit
-    puts 'Deposit Center'
+    puts 'Deposit Center'.colorize(:yellow)
     separator
     puts "How much would you like to deposit?"
     @deposit = gets.to_f
@@ -262,7 +263,7 @@ def menu
   end
 
   def withdraw
-    puts "Withdrawal Center"
+    puts "Withdrawal Center".colorize(:yellow)
     separator
     puts "#{(@user_name).capitalize}, your balance is $#{@account_balance}".colorize(:green)
     puts "How much would you like to withdraw?"
@@ -285,7 +286,7 @@ def menu
   def high_low
     n1 = rand(1...100)
     n2 = rand(1...100)
-    puts @a.asciify('High / Low')
+    puts @a.asciify('High / Low').colorize(:yellow)
     separator
     puts "In this game you will get an initial number and then predict whether 
     the next number will be lower or higher than the first"
@@ -417,7 +418,7 @@ def menu
 
   def slots
     separator
-    puts @a.asciify('SLOTS')
+    puts @a.asciify('SLOTS').colorize(:yellow)
     separator
     puts "In this game you will pull a lever and three random words will generate."
     puts "If all three match, you win! If 2 of the three match, you get a partial win!"
@@ -495,11 +496,11 @@ def menu
    end
 
 def craps
-  @a.asciify('Craps')   
+   puts @a.asciify('Craps').colorize(:yellow)
    puts "Welcome to the game of Craps!"
    srand Time.now.tv_sec
 
-   puts "Total cash: $#{@account_balance}"
+   puts "Total cash: $#{@account_balance}".colorize(:green)
    puts "How much would you like to bet?"
    @bet = gets.chomp.to_i
   #  @account_balance -= @bet
